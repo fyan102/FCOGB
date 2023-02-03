@@ -1,0 +1,12 @@
+./venv/
+./.idea/
+./.git/
+./.vscode/
+./.env/
+*__pycache__
+.ipynb_checkpoints
+./experiment_output*/
+./experiment_output_greedy/
+./experiment_output_exhaustive/
+./experiment_output_coverage/
+./analysis_results
