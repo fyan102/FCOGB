@@ -1,0 +1,117 @@
+Running time:0:00:08.523128
+Each rule: ['0:00:00.218057', '0:00:00.217859', '0:00:00.627719', '0:00:00.661901', '0:00:00.985461', '0:00:01.017406', '0:00:00.946209', '0:00:01.213760', '0:00:01.376284', '0:00:01.258323']
+=======iteration 0========
+
+fc risk: 0.8078570519324267
+fc train risk: 0.8076771970177516
+fc test risk: 0.8301832800445296
+coverage: 275
+   -1.4306 if Pclass>=2 & Sex>=1
+=======iteration 1========
+
+fc risk: 0.6686433989887969
+fc train risk: 0.6681710871988739
+fc test risk: 0.6899242015587799
+coverage: 118
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+=======iteration 2========
+
+fc risk: 0.645769626401088
+fc train risk: 0.6440333223842137
+fc test risk: 0.6271710492495979
+coverage: 11
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+=======iteration 3========
+
+fc risk: 0.6213298209009764
+fc train risk: 0.619567145605319
+fc test risk: 0.6271387797948458
+coverage: 339
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+=======iteration 4========
+
+fc risk: 0.605519718065213
+fc train risk: 0.6036721432716642
+fc test risk: 0.6110589348065901
+coverage: 77
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+=======iteration 5========
+
+fc risk: 0.5928562178860524
+fc train risk: 0.5907034447724006
+fc test risk: 0.6243296284359787
+coverage: 18
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+   +1.8636 if Age<=19.0 & Fare<=13.0 & Fare>=7.925 & Pclass>=3
+=======iteration 6========
+
+fc risk: 0.5783732308748953
+fc train risk: 0.5761492378242313
+fc test risk: 0.5929494251191315
+coverage: 78
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+   +1.8636 if Age<=19.0 & Fare<=13.0 & Fare>=7.925 & Pclass>=3
+   -0.9003 if Age<=25.0 & Embarked<=1 & Fare>=7.925 & Pclass>=3
+=======iteration 7========
+
+fc risk: 0.5695860441902234
+fc train risk: 0.5665382891905247
+fc test risk: 0.5746236416659585
+coverage: 6
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+   +1.8636 if Age<=19.0 & Fare<=13.0 & Fare>=7.925 & Pclass>=3
+   -0.9003 if Age<=25.0 & Embarked<=1 & Fare>=7.925 & Pclass>=3
+   +3.0618 if Age<=19.0 & Fare>=26.0 & Parch>=1.0 & Pclass<=2 & Pclass>=2 & Sex>=1
+=======iteration 8========
+
+fc risk: 0.5598543149063732
+fc train risk: 0.5567835539991202
+fc test risk: 0.575007518385353
+coverage: 151
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+   +1.8636 if Age<=19.0 & Fare<=13.0 & Fare>=7.925 & Pclass>=3
+   -0.9003 if Age<=25.0 & Embarked<=1 & Fare>=7.925 & Pclass>=3
+   +3.0618 if Age<=19.0 & Fare>=26.0 & Parch>=1.0 & Pclass<=2 & Pclass>=2 & Sex>=1
+   -0.5117 if Age>=19.0 & Pclass<=2 & Sex>=1
+=======iteration 9========
+
+fc risk: 0.5580746142514045
+fc train risk: 0.5541268650375991
+fc test risk: 0.5511833977048405
+coverage: 8
+   -1.4306 if Pclass>=2 & Sex>=1
+   +1.8243 if Pclass<=2 & Sex<=0
+   +3.7927 if Age<=25.0 & Fare<=26.0 & Fare>=7.925 & Parch>=1.0 & Sex>=1 & SibSp<=1.0
+   -0.5478 if Parch<=1.0 & Sex>=1
+   +0.9829 if Age<=42.0 & Age>=25.0 & Fare>=26.0 & Parch<=1.0 & SibSp<=1.0
+   +1.8636 if Age<=19.0 & Fare<=13.0 & Fare>=7.925 & Pclass>=3
+   -0.9003 if Age<=25.0 & Embarked<=1 & Fare>=7.925 & Pclass>=3
+   +3.0618 if Age<=19.0 & Fare>=26.0 & Parch>=1.0 & Pclass<=2 & Pclass>=2 & Sex>=1
+   -0.5117 if Age>=19.0 & Pclass<=2 & Sex>=1
+   +3.1591 if Fare<=7.925 & Fare>=7.925 & Sex>=1 & SibSp<=1.0[0.1]

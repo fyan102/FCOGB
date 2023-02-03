@@ -1,0 +1,10 @@
+bitarray==1.5.3
+Sphinx==3.2.1
+sphinxcontrib-bibtex==1.0.0
+scikit-learn>=0.23.2
+sortedcontainers>=2.1.0
+pandas>=0.25
+numpy>=1.16.1
+matplotlib
+sortednp>=0.3.0
+scipy>=1.6.3

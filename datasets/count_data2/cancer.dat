@@ -1,0 +1,7 @@
+    age malignant yes no 
+1   <50        no  77 10
+2   <50       yes  51 13
+3 50-69        no  51 11
+4 50-69       yes  38 20
+5   70+        no   7  3
+6   70+       yes   6  3
