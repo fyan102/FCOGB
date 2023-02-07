@@ -56,7 +56,7 @@ def evaluate(dataset_name, load_method, obj='xgb',
             os.makedirs(folder + "/" + dataset_name)
         output = open(
             folder + dataset_name + '/' + dataset_name + '_' + obj + '_' + weight_update + '_' +
-            weight_update_method + '_realkd_col_' + str(col) + '_' + 'rep' + str(m) + ".txt", "a")
+            weight_update_method + '_realkd_col_' + str(col) + '_' + 'rep' + str(m) + ".txt", "w")
         train, test, train_target, test_target, _, _, _, n, labels = preprocess_datasets(load_method,
                                                                                          feature_map=feature_map,
                                                                                          random_seed=seeds[m])

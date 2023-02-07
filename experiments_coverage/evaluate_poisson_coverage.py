@@ -60,7 +60,7 @@ def evaluate(dataset_name, path, labels, feature_types, target, target_type=int,
             os.makedirs(folder + "/" + dataset_name)
         output = open(
             folder + dataset_name + '/' + dataset_name + '_' + obj + '_' + weight_update + '_' +
-            weight_update_method + '_realkd_col_' + str(col) + '_' + 'rep' + str(m) + ".txt", "a")
+            weight_update_method + '_realkd_col_' + str(col) + '_' + 'rep' + str(m) + ".txt", "w")
         train, test, train_target, test_target, _, _, _, n = preprocess_pd(path,
                                                                            labels,
                                                                            feature_types,
