@@ -172,7 +172,7 @@ def evaluate(dataset_name, path, labels, feature_types, target, target_type=int,
                     output.write('\north risk: ' + str(orth_fc_risk[i]) + '\n')
                     output.write('fc train risk: ' + str(orth_fc_train_risk[i]) + '\n')
                     output.write('fc test risk: ' + str(orth_fc_test_risk[i]) + '\n')
-                    output.write('coverage: ' + str(fc_coverages[i]) + '\n')
+                    output.write('coverage: ' + str(orth_coverages[i+1]) + '\n')
                     output.write(orth_fc_ensembles[i] + '\n')
 
         except Exception as e:
