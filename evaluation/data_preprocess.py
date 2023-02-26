@@ -82,7 +82,8 @@ def preprocess_pd(filename, features: list, types: list, target, target_type=int
                     yy.append(
                         target_type(row[y_index]) if target not in feature_map else feature_map[target][row[y_index]])
                 except Exception as e:
-                    print('Error in preprocessing', e)
+                    pass
+                    # print('Error in preprocessing', e)
         train, test, train_target, test_target = train_test_split(xx, yy, random_state=random_seed, test_size=test_size)
         for i in range(len(train)):
             if i == 0:
