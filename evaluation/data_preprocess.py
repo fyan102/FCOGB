@@ -1,4 +1,6 @@
 import csv
+
+import numpy as np
 from sklearn.model_selection import train_test_split
 
 
@@ -84,6 +86,9 @@ def preprocess_pd(filename, features: list, types: list, target, target_type=int
                 except Exception as e:
                     pass
                     # print('Error in preprocessing', e)
+        mean = np.array(xx).mean(axis=0)
+        std = np.array(xx).std(axis=0)
+        # xx = [[(xx[i][j] - mean[j]) / std[j] for j in range(len(mean))] for i in range(len(xx))]
         train, test, train_target, test_target = train_test_split(xx, yy, random_state=random_seed, test_size=test_size)
         for i in range(len(train)):
             if i == 0:
@@ -96,6 +101,7 @@ def preprocess_pd(filename, features: list, types: list, target, target_type=int
                     U[j] = train[i][j]
         n = len(train)
         return train, test, train_target, test_target, L, U, d, n
+        # return xx, xx, yy, yy, L, U, d, len(xx)
 
 
 def preprocess_datasets(load_dataset, feature_map={},
@@ -113,6 +119,9 @@ def preprocess_datasets(load_dataset, feature_map={},
                 yy[i] = feature_map['target'][yy[i]]
             except Exception as e:
                 print(e)
+    mean = np.array(xx).mean(axis=0)
+    std = np.array(xx).std(axis=0)
+    # xx = [[(xx[i][j] - mean[j]) / std[j] for j in range(len(mean))] for i in range(len(xx))]
     train, test, train_target, test_target = train_test_split(xx, yy, random_state=random_seed,
                                                               test_size=test_size)
     for i in range(len(train)):
@@ -125,7 +134,7 @@ def preprocess_datasets(load_dataset, feature_map={},
             elif U[j] < train[i][j]:
                 U[j] = train[i][j]
     n = len(train)
-    labels=dataset.feature_names
+    labels = dataset.feature_names
     return train, test, train_target, test_target, L, U, d, n, labels
 
 
@@ -133,7 +142,9 @@ def preprocess_gen(x, y, test_size=0.2, random_seed=None):
     d = len(x[0])
     L = [None] * d
     U = [None] * d
-
+    mean = np.array(x).mean(axis=0)
+    std = np.array(x).std(axis=0)
+    # x = [[(x[i][j] - mean[j]) / std[j] for j in range(len(mean))] for i in range(len(x))]
     train, test, train_target, test_target = train_test_split(x, y, random_state=random_seed,
                                                               test_size=test_size)
     for i in range(len(train)):

@@ -2,10 +2,11 @@ import os
 from datetime import datetime
 from math import log, exp
 
+import numpy as np
 import pandas as pd
 from realkd.boosting import GradientBoostingObjectiveMWG, GradientBoostingObjectiveGPE, OrthogonalBoostingObjective, \
     OrthogonalBoostingObjectiveSlow, FullyCorrective, KeepWeight, LineSearch, GeneralRuleBoostingEstimator
-from realkd.rules import loss_function, GradientBoostingObjective
+from realkd.rules import loss_function, GradientBoostingObjective, Rule, AdditiveRuleEnsemble
 from sklearn.datasets import make_friedman1, make_friedman2, make_friedman3
 
 from evaluation.cross_validation import cv
@@ -20,8 +21,9 @@ folder = "../experiment_output_"
 
 
 def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_type=int, obj='orth',
-             weight_update='fc', weight_update_method='Line', feature_map={}, loss='squared', search='exhaustive',
-             repeat=5, max_rule_num=5, regs=(0, 0.1, 0.2, 0.5, 0.7, 1, 2, 4, 8, 16), col=10):
+                     weight_update='fc', weight_update_method='Line', feature_map={}, loss='squared',
+                     search='exhaustive',
+                     repeat=5, max_rule_num=5, regs=(0, 0.1, 0.2, 0.5, 0.7, 1, 2, 4, 8, 16), col=10):
     print('==========', dataset_name, '===========')
     print(obj, weight_update, weight_update_method)
     print('---------------------------------------')
@@ -40,11 +42,7 @@ def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_t
         obj_function = objs[obj]
         weight_update_func = weight_upds[weight_update]() if weight_update != 'fc' \
             else weight_upds[weight_update](solver=weight_update_method)
-        fc_estimator = GeneralRuleBoostingEstimator(num_rules=max_rule_num,
-                                                    max_col_attr=col, search=search,
-                                                    objective_function=obj_function,
-                                                    weight_update_method=weight_update_func,
-                                                    loss=loss)
+
         if not os.path.exists(folder + search):
             os.makedirs(folder + search)
         if not os.path.exists(folder + search + "/" + dataset_name):
@@ -60,8 +58,27 @@ def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_t
                                                                            random_seed=seeds[m])
         train_df = pd.DataFrame(train, columns=labels)
         test_df = pd.DataFrame(test, columns=labels)
-        train_sr = pd.Series(train_target)
-        test_sr = pd.Series(test_target)
+        ys = np.array(train_target + test_target)
+        a = ys.mean()
+        b = ys.std()
+        print(a, b)
+        if loss == 'squared':
+            # train_sr = pd.Series((train_target - a) / b)
+            # test_sr = pd.Series((test_target - a) / b)
+            train_sr = pd.Series(train_target)
+            test_sr = pd.Series(test_target)
+        else:
+            train_sr = pd.Series(train_target)
+            test_sr = pd.Series(test_target)
+        # default_rule = AdditiveRuleEnsemble([Rule(y=sum(train_sr) / len(train_sr))])
+        # print(default_rule)
+        fc_estimator = GeneralRuleBoostingEstimator(num_rules=max_rule_num,
+                                                    max_col_attr=col, search=search,
+                                                    objective_function=obj_function,
+                                                    weight_update_method=weight_update_func,
+                                                    # fit_intercept=True, normalize=True,
+                                                    # init_ensemble=default_rule,
+                                                    loss=loss)
         scores = {}
         if len(regs) == 1:
             reg = regs[0]
@@ -78,34 +95,43 @@ def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_t
                     reg = r
         selected_regs.append(reg)
         fc_estimator.set_reg(reg)
-        try:
-            start_time = datetime.now()
-            fc_estimator.fit(train_df, train_sr)
-            end_time = datetime.now()
-            print('runnning time:', end_time - start_time)
-            output.write('Running time:' + str(end_time - start_time) + '\n')
-            output.write('Each rule: ' + str(fc_estimator.time))
-            print(fc_estimator.rules_)
-            for fc_ensemble in fc_estimator.history:
-                risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
-                    [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
-                test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
-                train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
-                fc_test_risk.append(test_risk)
-                fc_train_risk.append(train_risk)
-                fc_risk.append(risk)
-                fc_ensembles.append(str(fc_ensemble))
-                coverage = sum(fc_ensemble[-1].q(train_df))
-                fc_coverages.append(coverage)
-                print(fc_ensemble)
-                print('coverage', coverage)
-                print('risk', risk)
-                print('train_risk', train_risk, 'test_risk', test_risk)
-            fc_train_risk_all.append(sum(fc_train_risk) / len(fc_train_risk))
-            fc_test_risk_all.append(sum(fc_test_risk) / len(fc_test_risk))
-            fc_coverages_all.append(fc_coverages)
-        except Exception as e:
-            print('Error2: ', e)
+        # try:
+        start_time = datetime.now()
+        fc_estimator.fit(train_df, train_sr)
+        end_time = datetime.now()
+        print('runnning time:', end_time - start_time)
+        output.write('Running time:' + str(end_time - start_time) + '\n')
+        output.write('Each rule: ' + str(fc_estimator.time))
+        print(fc_estimator.rules_)
+        # if loss == 'squared':
+        #     train_sr = train_sr * b + a
+        #     test_sr = test_sr * b + a
+        for fc_ensemble in fc_estimator.history:
+            # if loss == 'squared':
+            #     risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n + reg * sum(
+            #         [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+            #     test_risk = sum(loss_func(test_sr, fc_ensemble(test_df) * b + a)) / len(test_sr)
+            #     train_risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n
+            # else:
+            risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
+                [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+            test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
+            train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
+            fc_test_risk.append(test_risk)
+            fc_train_risk.append(train_risk)
+            fc_risk.append(risk)
+            fc_ensembles.append(str(fc_ensemble))
+            coverage = sum(fc_ensemble[-1].q(train_df))
+            fc_coverages.append(coverage)
+            print(fc_ensemble)
+            print('coverage', coverage)
+            print('risk', risk)
+            print('train_risk', train_risk, 'test_risk', test_risk)
+        fc_train_risk_all.append(sum(fc_train_risk) / len(fc_train_risk))
+        fc_test_risk_all.append(sum(fc_test_risk) / len(fc_test_risk))
+        fc_coverages_all.append(fc_coverages)
+        # except Exception as e:
+        #     print('Error2: ', e)
         try:
             for i in range(max_rule_num):
                 output.write('\n=======iteration ' + str(i) + '========\n')
@@ -123,8 +149,9 @@ def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_t
 
 
 def evaluate_loaded_data(dataset_name, load_method, obj='xgb',
-             weight_update='fc', weight_update_method='Line', feature_map={}, loss='squared', search='exhaustive',
-             repeat=5, max_rule_num=5, regs=(0, 0.1, 0.2, 0.5, 0.7, 1, 2, 4, 8, 16), col=10):
+                         weight_update='fc', weight_update_method='Line', feature_map={}, loss='squared',
+                         search='exhaustive',
+                         repeat=5, max_rule_num=5, regs=(0, 0.1, 0.2, 0.5, 0.7, 1, 2, 4, 8, 16), col=10):
     print('==========', dataset_name, '===========')
     print(obj, weight_update, weight_update_method)
     print('---------------------------------------')
@@ -147,6 +174,7 @@ def evaluate_loaded_data(dataset_name, load_method, obj='xgb',
                                                     max_col_attr=col, search=search,
                                                     objective_function=obj_function,
                                                     weight_update_method=weight_update_func,
+                                                    # fit_intercept=True, normalize=True,
                                                     loss=loss)
         if not os.path.exists(folder + search):
             os.makedirs(folder + search)
@@ -160,8 +188,15 @@ def evaluate_loaded_data(dataset_name, load_method, obj='xgb',
                                                                                          random_seed=seeds[m])
         train_df = pd.DataFrame(train, columns=labels)
         test_df = pd.DataFrame(test, columns=labels)
-        train_sr = pd.Series(train_target)
-        test_sr = pd.Series(test_target)
+        ys = np.concatenate((train_target, test_target))
+        a = ys.mean()
+        b = ys.std()
+        if loss == 'squared':
+            train_sr = pd.Series((train_target - a) / b)
+            test_sr = pd.Series((test_target - a) / b)
+        else:
+            train_sr = pd.Series(train_target)
+            test_sr = pd.Series(test_target)
         scores = {}
         if len(regs) == 1:
             reg = regs[0]
@@ -186,11 +221,20 @@ def evaluate_loaded_data(dataset_name, load_method, obj='xgb',
             output.write('Running time:' + str(end_time - start_time) + '\n')
             output.write('Each rule: ' + str(fc_estimator.time))
             print(fc_estimator.rules_)
+            if loss == 'squared':
+                train_sr = train_sr * b + a
+                test_sr = test_sr * b + a
             for fc_ensemble in fc_estimator.history:
-                risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
-                    [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
-                test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
-                train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
+                if loss == 'squared':
+                    risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n + reg * sum(
+                        [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+                    test_risk = sum(loss_func(test_sr, fc_ensemble(test_df) * b + a)) / len(test_sr)
+                    train_risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n
+                else:
+                    risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
+                        [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+                    test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
+                    train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
                 fc_test_risk.append(test_risk)
                 fc_train_risk.append(train_risk)
                 fc_risk.append(risk)
@@ -258,6 +302,7 @@ def evaluate_friedman(dataset_name, number, noise, d=4, test_size=0.2, obj='xgb'
                                                     max_col_attr=col, search=search,
                                                     objective_function=obj_function,
                                                     weight_update_method=weight_update_func,
+                                                    # fit_intercept=True, normalize=True,
                                                     loss=loss)
         x, y, labels = gen_friedman(dataset_name, number, noise, 1000, d=d)
         if not os.path.exists(folder + search):
@@ -272,8 +317,15 @@ def evaluate_friedman(dataset_name, number, noise, d=4, test_size=0.2, obj='xgb'
         print(train[0], train_target[0])
         train_df = pd.DataFrame(train, columns=labels)
         test_df = pd.DataFrame(test, columns=labels)
-        train_sr = pd.Series(train_target)
-        test_sr = pd.Series(test_target)
+        ys = np.concatenate((train_target, test_target))
+        a = ys.mean()
+        b = ys.std()
+        if loss == 'squared':
+            train_sr = pd.Series((train_target - a) / b)
+            test_sr = pd.Series((test_target - a) / b)
+        else:
+            train_sr = pd.Series(train_target)
+            test_sr = pd.Series(test_target)
         scores = {}
         if len(regs) == 1:
             reg = regs[0]
@@ -298,11 +350,20 @@ def evaluate_friedman(dataset_name, number, noise, d=4, test_size=0.2, obj='xgb'
             output.write('Running time:' + str(end_time - start_time) + '\n')
             output.write('Each rule: ' + str(fc_estimator.time))
             print(fc_estimator.rules_)
+            if loss == 'squared':
+                train_sr = train_sr * b + a
+                test_sr = test_sr * b + a
             for fc_ensemble in fc_estimator.history:
-                risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
-                    [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
-                test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
-                train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
+                if loss == 'squared':
+                    risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n + reg * sum(
+                        [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+                    test_risk = sum(loss_func(test_sr, fc_ensemble(test_df) * b + a)) / len(test_sr)
+                    train_risk = sum(loss_func(train_sr, fc_ensemble(train_df) * b + a)) / n
+                else:
+                    risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n + reg * sum(
+                        [rule.y * rule.y for rule in fc_ensemble.members]) / 2 / n
+                    test_risk = sum(loss_func(test_sr, fc_ensemble(test_df))) / len(test_sr)
+                    train_risk = sum(loss_func(train_sr, fc_ensemble(train_df))) / n
                 fc_test_risk.append(test_risk)
                 fc_train_risk.append(train_risk)
                 fc_risk.append(risk)

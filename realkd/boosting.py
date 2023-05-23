@@ -675,18 +675,21 @@ class KeepWeight(WeightUpdateMethod):
     def calc_weight(self, data, target, rules):
         all_weights = np.array([rule.y for rule in rules])
         return all_weights
+
+
 def orthonormalization(Q):
     n, k = Q.shape
     O = np.zeros(shape=(n, k))
     q = Q[:, 0]
-    O[:, 0] =  q / norm(q)
+    O[:, 0] = q / norm(q)
 
     for i in range(1, k):
         O_i = O[:, :i]
         q = Q[:, i]
         q_orth = q - O_i.dot(O_i.T.dot(q))
-        O[:, i] =  q_orth / norm(q_orth)
+        O[:, i] = q_orth / norm(q_orth)
     return O
+
 
 class GeneralRuleBoostingEstimator(BaseEstimator):
     def __init__(self, num_rules, objective_function, weight_update_method, loss='squared', reg=1.0,
@@ -696,6 +699,7 @@ class GeneralRuleBoostingEstimator(BaseEstimator):
             search_params = {'order': 'bestboundfirst', 'apx': 1.0, 'max_depth': None, 'discretization': qcut,
                              'max_col_attr': max_col_attr}
         self.num_rules = num_rules
+        self.num_components = 50
         self.objective = objective_function
         self.objective_function = objective_function
         self.max_col_attr = max_col_attr
@@ -726,8 +730,8 @@ class GeneralRuleBoostingEstimator(BaseEstimator):
             q_mat = np.column_stack(
                 [self.rules_[i].q(data) + np.zeros(len(data)) for i in range(len(self.rules_))])
             orth_basis = orthonormalization(q_mat)
-
-        while len(self.rules_) < self.num_rules:
+        num_components=0
+        while len(self.rules_) < self.num_rules and num_components<self.num_components:
             start_time = datetime.now()
             # Search for a rule
             scores = self.rules_(data)
@@ -740,7 +744,7 @@ class GeneralRuleBoostingEstimator(BaseEstimator):
             else:
                 y = 1.0
             q_vec = q(data)
-
+            num_components+=(1+len(q))
             if len(orth_basis) == 0:
                 basis = q_vec / norm(q_vec)
                 orth_basis = np.array([basis]).T
@@ -760,6 +764,7 @@ class GeneralRuleBoostingEstimator(BaseEstimator):
             self.history.append(AdditiveRuleEnsemble(
                 [Rule(q=rule.q, y=rule.y) for rule in self.rules_.members]))
             end_time = datetime.now()
+            # print(str(end_time - start_time))
             self.time.append(str(end_time - start_time))
         return self
 

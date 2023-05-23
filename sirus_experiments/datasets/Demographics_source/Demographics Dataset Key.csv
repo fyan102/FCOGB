@@ -1,0 +1,11 @@
+1    ANNUAL INCOME OF HOUSEHOLD (PERSONAL INCOME IF SINGLE),2    SEX,3    MARITAL STATUS,4    AGE,5    EDUCATION,6    OCCUPATION,7    HOW LONG HAVE YOU LIVED IN THE SAN FRAN./OAKLAND/SAN JOSE AREA?,8    DUAL INCOMES (IF MARRIED),9    PERSONS IN YOUR HOUSEHOLD,10    PERSONS IN HOUSEHOLD UNDER 18,11    HOUSEHOLDER STATUS,12    TYPE OF HOME,13    ETHNIC CLASSIFICATION,14    WHAT LANGUAGE IS SPOKEN MOST OFTEN IN YOUR HOME?
+"1. Less than $10,000",1. Male,1. Married,1. 14 thru 17,1. Grade 8 or less,1. Professional/Managerial,1. Less than one year,1. Not Married,1. One,0. None,1. Own,1. House,1. American Indian,1. English
+"2. $10,000 to $14,999",2. Female,"2. Living together, not married",2. 18 thru 24,2. Grades 9 to 11,2. Sales Worker,2. One to three years,2. Yes,2. Two,1. One,2. Rent,2. Condominium,2. Asian,2. Spanish
+"3. $15,000 to $19,999",,3. Divorced or separated,3. 25 thru 34,3. Graduated high school,3. Factory Worker/Laborer/Driver,3. Four to six years,3. No,3. Three,2. Two,3. Live with Parents/Family,3. Apartment,3. Black,3. Other
+"4. $20,000 to $24,999",,4. Widowed,4. 35 thru 44,4. 1 to 3 years of college,4. Clerical/Service Worker,4. Seven to ten years,,4. Four,3. Three,,4. Mobile Home,4. East Indian,
+"5. $25,000 to $29,999",,"5. Single, never married",5. 45 thru 54,5. College graduate,5. Homemaker,5. More than ten years,,5. Five,4. Four,,5. Other,5. Hispanic,
+"6. $30,000 to $39,999",,,6. 55 thru 64,6. Grad Study,"6. Student, HS or College",,,6. Six,5. Five,,,6. Pacific Islander,
+"7. $40,000 to $49,999",,,7. 65 and Over,,7. Military,,,7. Seven,6. Six,,,7. White,
+"8. $50,000 to $74,999",,,,,8. Retired,,,8. Eight,7. Seven,,,8. Other,
+"9. $75,000 or more",,,,,9. Unemployed,,,9. Nine or more,8. Eight,,,,
+,,,,,,,,,9. Nine or more,,,,
