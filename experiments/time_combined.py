@@ -605,4 +605,4 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
 
 
 if __name__=='__main__':
-    start_experiments()
+    start_experiments_time()

@@ -1,9 +1,7 @@
 import warnings
 
 from sklearn.datasets import load_iris, load_diabetes, load_breast_cancer, load_wine
-
 from evaluation.evaluate_boosting import evaluate_dataset, evaluate_loaded_data, evaluate_friedman, evaluate_poisson
-
 
 def start_experiments():
     all_experiments(search_methods=['exhaustive', 'greedy'], objectives=['orth'], weight_updates=['fc'])
@@ -26,7 +24,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                              ['GDP'], [int], 'Satisfaction', target_type=float,
                                              obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                              feature_map={}, loss='squared',
-                                             repeat=1, max_rule_num=30, search=s,
+                                             repeat=5, max_rule_num=30, search=s,
                                              regs=[0],
                                              col=col)
                     for col in [10]:

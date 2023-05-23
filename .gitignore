@@ -10,7 +10,7 @@ experiment_output*
 ./experiment_output_exhaustive/
 ./experiment_output_coverage/
 experiment_output
-experiment_output_coverage
+./experiment_output_coverage/
 experiment_output_exhaustive
 experiment_output_greedy
 evaluation/__pycache__
