@@ -2,6 +2,15 @@
 
 This repository contains code, datasets, and supplementary information for the paper.
 
+### Setup
+To replicate the experiments, you have to have Python of version at 3.9.11 installed on your machine. In addition you have to install dependencies via:
+
+```
+pip3 install -r requirements.txt
+```
+
+You need to add the ```FCOGB``` directory to the ```PYTHONPATH``` environment variable.
+
 To run the experiments of comparing risks and scores of different algorithms: 
 
 ```
@@ -27,4 +36,4 @@ The experiments for SIRUS are run in R language, the location of the file is: ``
 
 The analysis are in the ```analysis``` folder.
 
-If there is an error saying "no module named ...", add the ```FCOGB``` directory to the ```PYTHONPATH``` environment variable.
+
