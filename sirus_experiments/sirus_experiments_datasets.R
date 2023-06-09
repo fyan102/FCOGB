@@ -95,33 +95,33 @@ evaluate.sirus <-
       predictions <- sirus.predict(sirus.m, train_data)
       predictions2<-sirus.predict(sirus.m, test_data)
       
-      # if (i==1){
-      #   predictions<-rep(c(predictions[1]), each=nrow(train_data))
-      #   predictions2<-rep(c(predictions[1]), each=nrow(test_data))
-      #   if (cr=="c"){
-      #     # roc_object <- roc( y, predictions)
-      #     # train_score <- auc(roc_object)
-      #     # roc_object2 <- roc( yy, predictions2)
-      #     # test_score<-auc(roc_object2)
-      #     # print(predictions)
-      #     # print(y)
-      #     roc_obj <- roc(y, predictions)
-      #     train_score<-auc(roc_obj)
-      #     roc_obj2 <- roc(yy, predictions2)
-      #     test_score<-auc(roc_obj2)
-      #   }else{
-      #     # print(predictions)
-      #     # print(y)
-      #     train_score<-rsq(y, predictions)
-      #     test_score<-rsq(yy, predictions2)
-      #   }
-      #   train_scores<-append(train_scores, train_score)
-      #   test_scores<-append(test_scores, test_score)
-      #   # print(c("train score:",str(train_score)))
-      #   # print(c("test_score:",str(test_score)))
-      #   write(c("train_score", train_score), file = record_file,append=TRUE)
-      #   write(c("test_score", test_score), file = record_file,append=TRUE)
-      # }
+      if (i==1){
+        predictions<-rep(c(predictions[1]), each=nrow(train_data))
+        predictions2<-rep(c(predictions[1]), each=nrow(test_data))
+        if (cr=="c"){
+          # roc_object <- roc( y, predictions)
+          # train_score <- auc(roc_object)
+          # roc_object2 <- roc( yy, predictions2)
+          # test_score<-auc(roc_object2)
+          # print(predictions)
+          # print(y)
+          roc_obj <- roc(y, predictions)
+          train_score<-auc(roc_obj)
+          roc_obj2 <- roc(yy, predictions2)
+          test_score<-auc(roc_obj2)
+        }else{
+          # print(predictions)
+          # print(y)
+          train_score<-rsq(y, predictions)
+          test_score<-rsq(yy, predictions2)
+        }
+        train_scores<-append(train_scores, train_score)
+        test_scores<-append(test_scores, test_score)
+        # print(c("train score:",str(train_score)))
+        # print(c("test_score:",str(test_score)))
+        write(c("train_score", train_score), file = record_file,append=TRUE)
+        write(c("test_score", test_score), file = record_file,append=TRUE)
+      }
       if (cr=="c"){
         # roc_object <- roc( y, predictions)
         # train_score <- auc(roc_object)
