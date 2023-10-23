@@ -9,15 +9,21 @@ def cv(x, y, estimator, labels, loss='squared'):
     y = np.array(y)
     loss_func = loss_function(loss)
     sum_scores = 0
+    origin_rules = AdditiveRuleEnsemble([rule for rule in estimator.rules_])
     for train_index, test_index in kf.split(x):
         train_x = pd.DataFrame(x[train_index], columns=labels)
         train_y = pd.Series(y[train_index])
         test_x = pd.DataFrame(x[test_index], columns=labels)
         test_y = pd.Series(y[test_index])
-        estimator.fit(train_x, train_y)
-        for ensemble in estimator.history:
-            score = sum(loss_func(test_y, ensemble(test_x))) / len(test_y)
-            sum_scores += score
-            print("n:", len(ensemble), "score: ", score)
-    return sum_scores / 50
+        if estimator.rules_ is None or len(estimator.rules_) == 0:
+            estimator.fit(train_x, train_y)
+        else:
+            estimator.fit(train_x, train_y)
+        # for ensemble in estimator.history:
+        ensemble = estimator.rules_
+        score = sum(loss_func(test_y, ensemble(test_x)))
+        print("n:", len(ensemble), "score: ", score)
+        estimator.rules_ = AdditiveRuleEnsemble([rule for rule in origin_rules])
+        estimator.history.pop()
+    return score
 
