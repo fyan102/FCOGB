@@ -1,7 +1,7 @@
 from sklearn.model_selection import KFold
 import numpy as np
 import pandas as pd
-from realkd.rules import loss_function
+from realkd.rules import loss_function, AdditiveRuleEnsemble
 
 def cv(x, y, estimator, labels, loss='squared'):
     kf = KFold(n_splits=5)

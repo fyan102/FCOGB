@@ -3,6 +3,7 @@ import warnings
 from sklearn.datasets import load_iris, load_diabetes, load_breast_cancer, load_wine
 from evaluation.evaluate_boosting import evaluate_dataset, evaluate_loaded_data, evaluate_friedman, evaluate_poisson
 
+
 def start_experiments():
     all_experiments(search_methods=['exhaustive', 'greedy'], objectives=['orth'], weight_updates=['fc'])
     all_experiments(search_methods=['exhaustive'], objectives=['xgb'], weight_updates=['keep'])
@@ -24,7 +25,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                              ['GDP'], [int], 'Satisfaction', target_type=float,
                                              obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                              feature_map={}, loss='squared',
-                                             repeat=5, max_rule_num=30, search=s,
+                                             repeat=5, max_rule_num=20, search=s,
                                              regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
                                              col=col)
                     for col in [10]:
@@ -187,7 +188,8 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                                        'Divorced': 3},
                                                      'OverTime': {'Yes': 1, 'No': -1}, },
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 loss='logistic', repeat=5, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
+                                                 loss='logistic', repeat=5, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
+                                                 search=s,
                                                  max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
@@ -195,7 +197,8 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                         # try:
                         res['iris' + '_' + obj + '_' + weight_upd + '_' + upd] = \
                             evaluate_loaded_data('iris', load_iris, feature_map={'target': {0: -1, 1: 1, 2: -1}},
-                                                 repeat=5, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], loss='logistic', search=s,
+                                                 repeat=5, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], loss='logistic',
+                                                 search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                                  max_rule_num=30, col=col)
                     # except Exception as e:
@@ -226,7 +229,8 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                 evaluate_dataset('used_cars',
                                                  '../datasets/used_cars/cnt_km_year_powerPS_minPrice_maxPrice_avgPrice_sdPrice.csv',
                                                  ['count', 'km', 'year', 'powerPS'], [int, int, int, int], 'avgPrice',
-                                                 target_type=float, regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
+                                                 target_type=float, regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
+                                                 search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                                  repeat=5, max_rule_num=30, col=col)
                         except Exception as e:
@@ -393,7 +397,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                  target_type=int, loss='logistic',
                                                  regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 repeat=1, max_rule_num=30, col=col)
+                                                 repeat=5, max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
                     for col in [5]:
@@ -424,7 +428,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                               'Other': 3, 'Black': 4}
                                                  },
                                                  loss='logistic', search=s,
-                                                 repeat=1, max_rule_num=30,
+                                                 repeat=5, max_rule_num=30,
                                                  regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
                                                  col=col)
                         except Exception as e:
@@ -447,7 +451,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                 feature_map={"label": {'male': 1, 'female': -1}},
                                 obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                 loss='logistic', search=s,
-                                repeat=1, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
+                                repeat=5, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
                                 max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
@@ -471,7 +475,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                  target_type=int,
                                                  regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 repeat=1, max_rule_num=30, col=col)
+                                                 repeat=5, max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
                     for col in [4]:
@@ -522,7 +526,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                               'Churn': {'Yes': 1, 'No': -1},
                                                               }, regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 repeat=1, max_rule_num=30, loss='logistic', col=col)
+                                                 repeat=5, max_rule_num=30, loss='logistic', col=col)
                         except Exception as e:
                             print("Error 1", e)
                     for col in [5]:
@@ -545,7 +549,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                      'Status': {'Developing': 0, 'Developed': 1}
                                                  },
                                                  loss='squared', search=s,
-                                                 repeat=1, max_rule_num=30,
+                                                 repeat=5, max_rule_num=30,
                                                  regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10],
                                                  col=col)
                         except Exception as e:
@@ -565,7 +569,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                  target_type=int, loss='logistic',
                                                  regs=[0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 repeat=1, max_rule_num=30, col=col)
+                                                 repeat=5, max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
                     for col in [3]:
@@ -579,7 +583,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                  [int, int, int, int, float, float, int], 'suicides/100k pop',
                                                  target_type=float,
                                                  loss='squared',
-                                                 repeat=1, regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
+                                                 repeat=5, regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s,
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
                                                  max_rule_num=30, col=col)
                         except Exception as e:
@@ -592,7 +596,7 @@ def all_experiments(search_methods=['exhaustive'], objectives=['orth'], weight_u
                                                  [int, int, int], 'Global_Sales', target_type=float,
                                                  regs=[0, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10], search=s, loss='squared',
                                                  obj=obj, weight_update=weight_upd, weight_update_method=upd,
-                                                 repeat=1, max_rule_num=30, col=col)
+                                                 repeat=5, max_rule_num=30, col=col)
                         except Exception as e:
                             print("Error 1", e)
                     for col in [5]:
