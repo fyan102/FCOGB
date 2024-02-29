@@ -102,6 +102,7 @@ class OrthogonalBoostingObjective(ObjectFunction):
         if len(rules) != 0:
             orth_basis = kwargs['orth_basis']
             self.orth_basis = orth_basis[order]
+            self.g = self.g - self.orth_basis @ self.orth_basis.T @ self.g
         else:
             self.orth_basis = np.zeros(self.n)
 

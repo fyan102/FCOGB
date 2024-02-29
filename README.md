@@ -1,6 +1,6 @@
-## Orthogonal Gradient Boosting for Interpretable Additive Rule Ensembles
+## Orthogonal Gradient Boosting for Simpler Additive Rule Ensembles
 
-This repository contains code, datasets, and supplementary information for the paper.
+This repository contains the code and datasets for the paper "Orthogonal Gradient Boosting for Simpler Additive Rule Ensembles".
 
 ### Setup
 To replicate the experiments, you have to have Python of version at 3.9.11 installed on your machine. In addition you have to install dependencies via:

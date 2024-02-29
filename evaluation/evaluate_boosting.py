@@ -63,10 +63,10 @@ def evaluate_dataset(dataset_name, path, labels, feature_types, target, target_t
         b = ys.std()
         print(a, b)
         if loss == 'squared':
-            # train_sr = pd.Series((train_target - a) / b)
-            # test_sr = pd.Series((test_target - a) / b)
-            train_sr = pd.Series(train_target)
-            test_sr = pd.Series(test_target)
+            train_sr = pd.Series(train_target - a) 
+            test_sr = pd.Series(test_target - a)
+            # train_sr = pd.Series(train_target)
+            # test_sr = pd.Series(test_target)
         else:
             train_sr = pd.Series(train_target)
             test_sr = pd.Series(test_target)
@@ -200,11 +200,11 @@ def evaluate_loaded_data(dataset_name, load_method, obj='xgb',
         train_df = pd.DataFrame(train, columns=labels)
         test_df = pd.DataFrame(test, columns=labels)
         ys = np.concatenate((train_target, test_target))
-        # a = ys.mean()
-        # b = ys.std()
+        a = ys.mean()
+        b = ys.std()
         if loss == 'squared':
-            train_sr = pd.Series(train_target)
-            test_sr = pd.Series(test_target)
+            train_sr = pd.Series(train_target-a)
+            test_sr = pd.Series(test_target-a)
         else:
             train_sr = pd.Series(train_target)
             test_sr = pd.Series(test_target)
@@ -344,8 +344,8 @@ def evaluate_friedman(dataset_name, number, noise, d=4, test_size=0.2, obj='xgb'
         a = ys.mean()
         b = ys.std()
         if loss == 'squared':
-            train_sr = pd.Series(train_target)
-            test_sr = pd.Series(test_target)
+            train_sr = pd.Series(train_target-a)
+            test_sr = pd.Series(test_target-a)
         else:
             train_sr = pd.Series(train_target)
             test_sr = pd.Series(test_target)
